@@ -151,6 +151,7 @@ updateExperience();
 // PROJECT FILTER + MORE PROJECT
 // =====================================================
 
+
 const filterButtons = document.querySelectorAll(".filter-btn");
 const projectCards = document.querySelectorAll(".project-card");
 const projectMore = document.getElementById("projectMore");
@@ -160,8 +161,8 @@ const maxVisibleProjects = 4;
 let currentFilter = "all";
 let isExpanded = false;
 
-
 function updateProjects() {
+
     const filteredProjects = Array.from(projectCards).filter((card) => {
         const category = card.dataset.category;
 
@@ -172,51 +173,49 @@ function updateProjects() {
         ? filteredProjects
         : filteredProjects.slice(0, maxVisibleProjects);
 
+    // Tampilkan / sembunyikan project
     projectCards.forEach((card) => {
-        if (visibleProjects.includes(card)) {
-            card.style.display = "block";
 
-            requestAnimationFrame(() => {
-                card.classList.remove("hidden");
-            });
+        if (visibleProjects.includes(card)) {
+            card.style.display = "flex";
         } else {
-            card.classList.add("hidden");
             card.style.display = "none";
         }
+
     });
 
+    // More Project / Show Less
     if (filteredProjects.length > maxVisibleProjects) {
+
         projectMore.style.display = "block";
 
         projectMore.textContent = isExpanded
             ? "Show Less"
             : "More Project";
+
     } else {
+
         projectMore.style.display = "none";
+
     }
 }
 
 
-// Filter kategori
+// Filter button
 filterButtons.forEach((button) => {
 
     button.addEventListener("click", () => {
 
-        // Active button
         filterButtons.forEach((btn) => {
             btn.classList.remove("active");
         });
 
         button.classList.add("active");
 
-
-        // Ambil kategori
         currentFilter = button.dataset.filter;
 
-
-        // Set kembali ke kondisi awal
+        // Reset ke 4 project ketika ganti filter
         isExpanded = false;
-
 
         updateProjects();
 
@@ -225,7 +224,7 @@ filterButtons.forEach((button) => {
 });
 
 
-// More Project
+// More Project / Show Less
 if (projectMore) {
 
     projectMore.addEventListener("click", () => {
@@ -237,6 +236,7 @@ if (projectMore) {
     });
 
 }
+
 
 // Jalankan pertama kali
 updateProjects();
