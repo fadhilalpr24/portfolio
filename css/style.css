@@ -123,15 +123,6 @@ button {
     align-items: center;
 }
 
-/* .hero-greeting {
-    margin-bottom: 12px;
-
-    font-size: 1rem;
-    font-weight: 600;
-
-    color: #2563eb;
-} */
-
 .hero h1 {
     margin-bottom: 20px;
     font-size: clamp(3rem, 7vw, 5.5rem);
@@ -607,32 +598,100 @@ button {
 ========================= */
 
 .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
     gap: 24px;
-    align-items: stretch;
+    padding: 10px 5px 25px;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    width: 100%;
+}
+
+.projects-grid::-webkit-scrollbar {
+    display: none;
+}
+
+/* Scroll buttons */
+.projects-slider {
+    position: relative;
+    width: 100%;
+}
+
+.projects-grid {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 5px 25px;
+
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+.projects-grid::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* Small scroll arrows */
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    z-index: 10;
+
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #ffffff;
+    color: #2563eb;
+
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+    transition: all 0.25s ease;
+}
+
+.scroll-btn:hover {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.scroll-left {
+    left: 8px;
+}
+
+.scroll-right {
+    right: 8px;
 }
 
 .project-card {
-    min-height: 300px;
-    height: 100%;
-    padding: 30px;
-    border-radius: 14px;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    overflow: hidden;
+    flex: 0 0 540px;
+    min-height: 400px;
+    /* border: 1px solid #e5e7eb; */
+    border-radius: 20px;
     background: #f4f9ff;
-
-    opacity: 1;
-    transform: translateY(0);
     transition:
         opacity 0.35s ease,
         transform 0.35s ease;
 }
 
 .project-card:hover {
-    transform: translateY(-5px);
+    transform: scale(1.02);
     box-shadow:
         0 15px 35px rgba(0, 0, 0, 0.08);
 }
@@ -648,8 +707,9 @@ button {
 .project-content {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    min-height: 0;
+    height: 100%;
+    min-height: 390px;
+    padding: 28px;
 }
 
 .project-content h3 {
@@ -685,9 +745,9 @@ button {
 .project-links {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 8px;
     margin-top: auto;
-    padding-top: 20px;
+    padding-top: 25px;
 }
 
 .project-link {
@@ -740,10 +800,7 @@ button {
     width: fit-content;
     margin: 0 0 20px 0;
     color: #eb9c25;
-    border-radius: 20px;
-    /* padding: 5px 15px; */
-    /* background: #ffcaab; */
-    /* border: 1px solid #eb9c25; */ 
+    border-radius: 20px; 
 }
 
 .project-category[data-category="data"] {
@@ -751,9 +808,6 @@ button {
     margin: 0 0 20px 0;
     color: #3ceb25;
     border-radius: 20px;
-    /* padding: 5px 15px; */
-    /* background: #ffcaab; */
-    /* border: 1px solid #eb9c25; */ 
 }
 
 .project-category[data-category="development"] {
@@ -761,9 +815,6 @@ button {
     margin: 0 0 20px 0;
     color: #7725eb;
     border-radius: 20px;
-    /* padding: 5px 15px; */
-    /* background: #ffcaab; */
-    /* border: 1px solid #eb9c25; */ 
 }
 
 .project-category[data-category="system-analysis"] {
@@ -771,49 +822,6 @@ button {
     margin: 0 0 20px 0;
     color: #2599eb;
     border-radius: 20px;
-    /* padding: 5px 15px; */
-    /* background: #ffcaab; */
-    /* border: 1px solid #eb9c25; */ 
-}
-
-
-/* .project-card[data-category="development"] {
-    background: #f1f6fc;
-}
-
-.project-card[data-category="system-analysis"] {
-    background: #ecf8f1;
-}
-
-.project-card[data-category="uiux"] {
-    background: #fcf5f0;
-}
-
-.project-card[data-category="data"] {
-    background: #f1f0fc;
-} */
-
-
-/* =========================
-   PROJECT MORE
-========================= */
-
-.project-more-btn {
-    display: none;
-    margin: 20px auto 0;
-    padding: 8px 25px;
-    border-radius: 20px;
-    background: #f5f9ff;
-    color: #2563eb;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: 0.2px solid #c8d5e1;
-}
-
-.project-more-btn:hover {
-    background: #eaf2ff;
-    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
 }
 
 
@@ -1039,6 +1047,18 @@ button {
         display: none;
     }
 
+}
+
+@media (max-width: 768px) {
+    .project-card {
+        flex: 0 0 82%;
+        min-height: 370px;
+    }
+
+    .project-content {
+        min-height: 370px;
+        padding: 24px;
+    }
 }
 
 

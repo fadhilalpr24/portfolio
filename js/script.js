@@ -148,75 +148,173 @@ updateExperience();
 
 
 // =====================================================
-// PROJECT FILTER + MORE PROJECT
+// PROJECT FILTER + HORIZONTAL SCROLL
 // =====================================================
-
 
 const filterButtons = document.querySelectorAll(".filter-btn");
 const projectCards = document.querySelectorAll(".project-card");
-const projectMore = document.getElementById("projectMore");
 
-const maxVisibleProjects = 4;
+const projectsGrid = document.querySelector(".projects-grid");
+const scrollLeftBtn = document.getElementById("scrollLeft");
+const scrollRightBtn = document.getElementById("scrollRight");
 
 let currentFilter = "all";
-let isExpanded = false;
 
-function updateProjects() {
 
-    const filteredProjects = Array.from(projectCards).filter((card) => {
-        const category = card.dataset.category;
+// =====================================================
+// UPDATE SCROLL BUTTONS
+// =====================================================
 
-        return currentFilter === "all" || category === currentFilter;
+function updateScrollButtons() {
+
+    if (!projectsGrid || !scrollLeftBtn || !scrollRightBtn) {
+        return;
+    }
+
+    // Ambil project yang sedang ditampilkan
+    const visibleCards = Array.from(projectCards).filter(card => {
+        return card.style.display !== "none";
     });
 
-    const visibleProjects = isExpanded
-        ? filteredProjects
-        : filteredProjects.slice(0, maxVisibleProjects);
+    // ---------------------------------------------
+    // Kalau hanya 1-2 project
+    // Tidak perlu panah
+    // ---------------------------------------------
 
-    // Tampilkan / sembunyikan project
-    projectCards.forEach((card) => {
+    if (visibleCards.length <= 2) {
 
-        if (visibleProjects.includes(card)) {
-            card.style.display = "flex";
-        } else {
-            card.style.display = "none";
-        }
+        scrollLeftBtn.style.display = "none";
+        scrollRightBtn.style.display = "none";
 
-    });
+        projectsGrid.style.overflowX = "hidden";
 
-    // More Project / Show Less
-    if (filteredProjects.length > maxVisibleProjects) {
+        return;
+    }
 
-        projectMore.style.display = "block";
 
-        projectMore.textContent = isExpanded
-            ? "Show Less"
-            : "More Project";
+    // ---------------------------------------------
+    // Kalau project lebih dari 2
+    // Tampilkan panah
+    // ---------------------------------------------
+
+    scrollLeftBtn.style.display = "flex";
+    scrollRightBtn.style.display = "flex";
+
+    projectsGrid.style.overflowX = "auto";
+
+    updateArrowState();
+}
+
+
+// =====================================================
+// UPDATE STATUS PANAH
+// =====================================================
+
+function updateArrowState() {
+
+    if (!projectsGrid || !scrollLeftBtn || !scrollRightBtn) {
+        return;
+    }
+
+    const maxScroll =
+        projectsGrid.scrollWidth - projectsGrid.clientWidth;
+
+
+    // ---------------------------------------------
+    // Panah kiri
+    // ---------------------------------------------
+
+    if (projectsGrid.scrollLeft <= 5) {
+
+        scrollLeftBtn.style.opacity = "0.3";
+        scrollLeftBtn.style.pointerEvents = "none";
 
     } else {
 
-        projectMore.style.display = "none";
+        scrollLeftBtn.style.opacity = "1";
+        scrollLeftBtn.style.pointerEvents = "auto";
+
+    }
+
+
+    // ---------------------------------------------
+    // Panah kanan
+    // ---------------------------------------------
+
+    if (projectsGrid.scrollLeft >= maxScroll - 5) {
+
+        scrollRightBtn.style.opacity = "0.3";
+        scrollRightBtn.style.pointerEvents = "none";
+
+    } else {
+
+        scrollRightBtn.style.opacity = "1";
+        scrollRightBtn.style.pointerEvents = "auto";
 
     }
 }
 
 
-// Filter button
-filterButtons.forEach((button) => {
+// =====================================================
+// UPDATE PROJECTS
+// =====================================================
+
+function updateProjects() {
+
+    projectCards.forEach(card => {
+
+        const category = card.dataset.category;
+
+        if (
+            currentFilter === "all" ||
+            category === currentFilter
+        ) {
+
+            card.style.display = "flex";
+
+        } else {
+
+            card.style.display = "none";
+
+        }
+
+    });
+
+
+    // Reset posisi scroll setiap ganti kategori
+    if (projectsGrid) {
+        projectsGrid.scrollLeft = 0;
+    }
+
+
+    // Cek ulang apakah perlu panah
+    updateScrollButtons();
+}
+
+
+// =====================================================
+// FILTER BUTTON
+// =====================================================
+
+filterButtons.forEach(button => {
 
     button.addEventListener("click", () => {
 
-        filterButtons.forEach((btn) => {
+        // Remove active dari semua button
+        filterButtons.forEach(btn => {
             btn.classList.remove("active");
         });
 
+
+        // Tambahkan active ke button yang diklik
         button.classList.add("active");
 
+
+        // Ambil kategori
         currentFilter = button.dataset.filter;
 
-        // Reset ke 4 project ketika ganti filter
-        isExpanded = false;
 
+        // Update project
         updateProjects();
 
     });
@@ -224,20 +322,56 @@ filterButtons.forEach((button) => {
 });
 
 
-// More Project / Show Less
-if (projectMore) {
+// =====================================================
+// SCROLL LEFT
+// =====================================================
 
-    projectMore.addEventListener("click", () => {
+if (scrollLeftBtn) {
 
-        isExpanded = !isExpanded;
+    scrollLeftBtn.addEventListener("click", () => {
 
-        updateProjects();
+        projectsGrid.scrollBy({
+            left: -400,
+            behavior: "smooth"
+        });
 
     });
 
 }
 
 
-// Jalankan pertama kali
+// =====================================================
+// SCROLL RIGHT
+// =====================================================
+
+if (scrollRightBtn) {
+
+    scrollRightBtn.addEventListener("click", () => {
+
+        projectsGrid.scrollBy({
+            left: 400,
+            behavior: "smooth"
+        });
+
+    });
+
+}
+
+
+// =====================================================
+// UPDATE PANAH SAAT SCROLL MANUAL
+// =====================================================
+
+if (projectsGrid) {
+
+    projectsGrid.addEventListener("scroll", updateArrowState);
+
+}
+
+
+// =====================================================
+// JALANKAN PERTAMA KALI
+// =====================================================
+
 updateProjects();
 
