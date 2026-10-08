@@ -844,7 +844,7 @@ button {
     gap: 8px;
 
     margin-top: auto;
-    padding-top: 22px;
+    /* padding-top: 22px; */
 }
 
 .project-link {
