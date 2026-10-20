@@ -2,14 +2,25 @@
 // MOBILE NAVIGATION
 // =====================================================
 
-const menuToggle = document.getElementById("menuToggle");
-const navMenu = document.getElementById("navMenu");
 
-if (menuToggle && navMenu) {
+const menuToggle = document.getElementById("menuToggle");
+const mobileDropdown = document.getElementById("mobileDropdown");
+
+if (menuToggle && mobileDropdown) {
     menuToggle.addEventListener("click", () => {
-        navMenu.classList.toggle("active");
+        const isActive = mobileDropdown.classList.toggle("active");
+
+        menuToggle.setAttribute("aria-expanded", isActive);
+    });
+
+    mobileDropdown.querySelectorAll(".nav-menu a").forEach(link => {
+        link.addEventListener("click", () => {
+            mobileDropdown.classList.remove("active");
+            menuToggle.setAttribute("aria-expanded", "false");
+        });
     });
 }
+
 
 
 // =====================================================
