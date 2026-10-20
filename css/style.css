@@ -1546,7 +1546,7 @@ cursor: pointer;
         background: #ffffff;
         border-bottom: 1px solid #e5e7eb;
         padding: 20px 20px 10px;
-    gap: 15px;
+        gap: 15px;
     }
 
     .mobile-dropdown.active {
@@ -1572,15 +1572,18 @@ cursor: pointer;
         display: block;
     }
 
-
     .hero-container {
         grid-template-columns: 1fr;
-        gap: 50px;
+        gap: 40px;
     }
 
     .hero {
-        padding: 70px 0;
+        padding: 40px 0;
 
+    }
+
+    .hero-visual {
+        order: -1;
     }
 
 
@@ -1638,16 +1641,4 @@ cursor: pointer;
         display: none;
     }
 
-}
-
-@media (max-width: 768px) {
-    /* .project-card {
-        flex: 0 0 82%;
-        min-height: 370px;
-    } */
-
-    /* .project-content {
-        min-height: 370px;
-        padding: 24px;
-    } */
 }
